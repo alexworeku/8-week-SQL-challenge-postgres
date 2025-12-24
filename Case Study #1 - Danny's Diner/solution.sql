@@ -183,6 +183,50 @@ group by swp.customer_id
 order by points_earned desc;
 
 
+-- Bonus Question 
+-- #1: Recreate a table that has the following columns: customer_id, order_date, product_name, price, member
+
+
+select
+	s.customer_id,
+	s.order_date,
+	m.product_name,
+	m.price,
+	case 
+		when s.order_date >= mem.join_date then 'Y'
+		else 'N'
+	end as member
+
+from sales s left join members mem on s.customer_id = mem.customer_id
+join menu m on s.product_id = m.product_id
+order by s.customer_id, s.order_date, m.price desc;
+
+-- #2 Include ranking for members
+
+with customers_with_membership_status as (
+select
+	s.customer_id,
+	s.order_date,
+	m.product_name,
+	m.price,
+	case 
+		when s.order_date >= mem.join_date then 'Y'
+		else 'N'
+	end as member
+from sales s left join members mem on s.customer_id = mem.customer_id
+join menu m on s.product_id = m.product_id
+)
+
+select *,
+case 
+	when cwms.member = 'Y' then dense_rank() 
+		over (
+		partition by cwms.customer_id, cwms.member
+		order by cwms.order_date) 
+	else null
+end as ranking
+from customers_with_membership_status cwms
+order by cwms.customer_id, cwms.order_date, cwms.price desc;
 
 
 
