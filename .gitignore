@@ -1,0 +1,22 @@
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# DBeaver
+# Keeps your local connection settings and credentials private
+.dbeaver/
+.dbeaver-data-sources.xml
+dbeaver-debug.log
+
+# PostgreSQL / Database
+*.sql.gz
+*.sql.bak
+*.log
+dump.rdb
+
+
+# IDE
+.vscode/
+.idea/
+*.swp
