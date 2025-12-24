@@ -64,17 +64,6 @@ where ic.rnk=1;
 
 -- 6. Which item was purchased first by the customer after they became a member?
 
-select s.customer_id, s.order_date, mn.product_name
-from sales s join members m on s.customer_id = m.customer_id
-join menu mn on mn.product_id = s.product_id
-where  s.order_date = (
-
-select min(s2.order_date)
-from sales s2
-where s2.customer_id = s.customer_id and s2.order_date >= m.join_date 
-);
-
-
 with first_purchased_items as (
 select
 s.customer_id,
@@ -84,7 +73,9 @@ dense_rank() over (
 partition by s.customer_id
 order by s.order_date asc) as rnk
 from sales s join members m on s.customer_id = m.customer_id
-join menu mn on mn.product_id = s.product_id)
+join menu mn on mn.product_id = s.product_id
+where s.order_date >= m.join_date
+)
 
 select  
 fpi.customer_id,
