@@ -16,8 +16,8 @@ Each folder is self-contained and includes organized scripts for both database s
 | Week | Case Study | Status | Key Skills |
 | :---: | :--- | :---: | :--- |
 | 1 | [🍜 Danny's Diner](./Case%20Study%20%231%20-%20Danny's%20Diner/) | ✅ Complete | Joins, Aggregations, Window Functions |
-| 2 | [🍕 Pizza Runner](./Case%20Study%20%232%20-%20Pizza%20Runner/) | 🛠️ In Progress | Data Cleaning, CTEs, Date/Time Functions |
-| 3 | [🥑 Foodie-Fi]() | ⏳ Planned | Subqueries, Cohort Analysis |
+| 2 | [🍕 Pizza Runner](./Case%20Study%20%232%20-%20Pizza%20Runner/) | ✅ Complete | Data Cleaning, CTEs, Date/Time Functions |
+| 3 | [🥑 Foodie-Fi]() | 🛠️ In Progress | Subqueries, Cohort Analysis |
 | 4 | [🛒 Data Bank]() | ⏳ Planned | Business Logic, Forecasting |
 | 5 | [🛍️ Data Mart]() | ⏳ Planned | Data ETL, Performance Analysis |
 | 6 | [🍪 Clique Bait]() | ⏳ Planned | Funnel Analysis, Web Analytics |
