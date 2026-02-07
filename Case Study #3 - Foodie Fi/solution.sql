@@ -102,12 +102,109 @@ select
 	s.customer_id,
 	s.plan_id,
 	s.start_date,
-	dense_rank() over (partition by s.customer_id order by s.start_date) as rnk
-from subscriptions s)
+	dense_rank() over (partition by s.customer_id order by s.start_date) as rnk,
+	p.plan_name
+from subscriptions s
+join plans p on s.plan_id = p.plan_id
+)
 select 
 	cr.plan_id,
-	count(*) filter (where cr.rnk=2) as n_customer_plans_after_trial,
-	count(distinct cr.customer_id) as n_customers
+	cr.plan_name,
+	count(*) as n_customer_after_trial,
+	round(100.0*count(*) filter (where cr.rnk=2)/(select count(distinct cr2.customer_id) from customers_ranked cr2),1) as percentage
 from customers_ranked cr
-group by cr.plan_id;
+where cr.rnk=2
+group by cr.plan_id,cr.plan_name
+order by percentage desc;
 
+
+--with customers as ()
+with customer_next_plan_cte as (
+select 
+	s.plan_id as current_plan_id,
+
+	s.customer_id, 
+	s.start_date,
+	lead(s.plan_id,1) over (partition by s.customer_id order by s.start_date) as next_plan_id
+from subscriptions s
+)
+
+select 
+	p.plan_name,
+	count(*) as converstion_count,
+	100.0 * count(*)/sum(count(*)) over() as percentage
+	
+from customer_next_plan_cte cnp  join plans p on p.plan_id = cnp.next_plan_id
+where cnp.current_plan_id=0 and cnp.next_plan_id is not null
+group by cnp.next_plan_id, p.plan_name
+order by percentage desc;
+
+
+
+/*
+ * Q7 What is the customer count and percentage breakdown of all 5 plan_name values at 2020-12-31?
+ */
+
+with customer_plan_cte as (
+select 
+	s.plan_id as current_plan_id,
+	lead(s.plan_id,1) over (partition by s.customer_id order by s.start_date) as next_plan_id,
+	s.start_date
+from subscriptions s 
+where s.start_date <='2020-12-31'
+)
+select 
+	
+	p.plan_name,
+	count(*) as converstion_count,
+	100.0 * count(*)/sum(count(*)) over() as percentage
+	
+from customer_plan_cte cp join plans p on p.plan_id = cp.current_plan_id 
+where cp.next_plan_id is null
+
+group by cp.current_plan_id, p.plan_name;
+
+
+/*
+ *Q8 How many customers have upgraded to an annual plan in 2020?
+ */
+
+select
+	count(distinct s.customer_id) as n_customers
+from subscriptions s
+where date_part('year', s.start_date)=2020 and s.plan_id=3;
+
+select *
+from plans p;
+/*
+*Q9 How many days on average does it take for a customer to an annual plan from the day they join Foodie-Fi?
+*/
+-- works, but can't handle edge cases where there is no trial
+with customers_annual_plan_cte as (
+
+select 
+	s.customer_id,
+	s.plan_id, 
+	s.start_date,
+	lead(s.start_date) over(partition by s.customer_id order by s.start_date) as annual_start_date
+from subscriptions s
+where s.plan_id=0  or s.plan_id =3)
+select 
+
+	round(avg(cap.annual_start_date - cap.start_date) ,2) as avg_num_of_days_till_annual_sub
+
+from customers_annual_plan_cte cap
+where cap.annual_start_date is not null;
+
+-- better approach
+
+select 
+	round(avg(annual.start_date - trial.start_date),2) as avg_day_till_annual_sub
+from subscriptions trial
+join subscriptions annual on trial.customer_id = annual.customer_id
+where trial.plan_id = 0 and annual.plan_id=3;
+
+
+/*
+ * Can you further breakdown this average value into 30 day periods (i.e. 0-30 days, 31-60 days etc)
+ */
