@@ -17,13 +17,7 @@ Each folder is self-contained and includes organized scripts for both database s
 | :---: | :--- | :---: | :--- |
 | 1 | [🍜 Danny's Diner](./Case%20Study%20%231%20-%20Danny's%20Diner/) | ✅ Complete | Joins, Aggregations, Window Functions |
 | 2 | [🍕 Pizza Runner](./Case%20Study%20%232%20-%20Pizza%20Runner/) | ✅ Complete | Data Cleaning, CTEs, Date/Time Functions |
-| 3 | [🥑 Foodie-Fi]() | 🛠️ In Progress | Subqueries, Cohort Analysis |
-| 4 | [🛒 Data Bank]() | ⏳ Planned | Business Logic, Forecasting |
-| 5 | [🛍️ Data Mart]() | ⏳ Planned | Data ETL, Performance Analysis |
-| 6 | [🍪 Clique Bait]() | ⏳ Planned | Funnel Analysis, Web Analytics |
-| 7 | [👕 Balanced Tree]() | ⏳ Planned | Financial Analysis, Transactions |
-| 8 | [🥬 Fresh Segments]() | ⏳ Planned | Customer Segmentation |
-
+| 3 | [🥑 Foodie-Fi]() | ✅ Complete | Subqueries, Cohort Analysis |
 ---
 
 ## 🛠️ Tech Stack
